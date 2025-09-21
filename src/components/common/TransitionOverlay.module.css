@@ -1,0 +1,27 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  
+  /* Черный цвет фона */
+  background-color: #181A20; 
+  
+  /* По умолчанию он полностью прозрачный и невидимый */
+  opacity: 0;
+  visibility: hidden;
+  
+  /* Анимация будет длиться 0.4 секунды */
+  transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
+  
+  /* Убедимся, что он лежит поверх всего остального */
+  z-index: 9999; 
+}
+
+/* Когда мы добавляем класс .visible... */
+.overlay.visible {
+  /* ...он становится полностью непрозрачным и видимым */
+  opacity: 1;
+  visibility: visible;
+}

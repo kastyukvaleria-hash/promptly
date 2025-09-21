@@ -1,0 +1,124 @@
+/* Главный контейнер навигационной панели */
+.nav {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 400px;
+  background-color: #1F222A;
+  border-radius: 18px;
+  padding: 8px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+}
+
+/* Обертка для каждой отдельной иконки */
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  color: #FFFFFF;
+  background-color: transparent;
+  border-radius: 14px;
+  z-index: 2;
+  transition: color 0.4s ease-in-out;
+}
+
+/* Стиль для нашей кнопки */
+.actionButton {
+  composes: link;
+  border: none;
+  cursor: pointer;
+}
+
+/* Обертка для позиционирования тултипа */
+.linkWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Стили для иконок */
+.link svg, .actionButton svg {
+  stroke-width: 40;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Стили для активной (выбранной) иконки */
+.link.active {
+  color: #1F222A;
+}
+
+/* Анимированный ползунок */
+.slider {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  height: 52px;
+  background-color: #8E96FF;
+  border-radius: 14px;
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.3, 1), width 0.4s cubic-bezier(0.2, 0.7, 0.3, 1);
+  z-index: 1;
+}
+
+/* --- ИСПРАВЛЕННЫЕ СТИЛИ ДЛЯ ТУЛТИПА --- */
+.tooltip {
+  position: absolute;
+  bottom: 115%;
+  left: 50%;
+  transform: translateX(-50%);
+  
+  /* --- УМЕНЬШИЛИ ШИРИНУ, ЧТОБЫ ОКНО БЫЛО КОМПАКТНЕЕ --- */
+  width: 240px; 
+  
+  background-color: #090A0C;
+  color: #8E96FF;
+  
+  /* --- УМЕНЬШИЛИ ВНУТРЕННИЕ ОТСТУПЫ --- */
+  padding: 14px 18px; 
+  border-radius: 12px;
+  
+  font-size: 0.8rem;
+  font-weight: 400;
+  
+  /* --- УМЕНЬШИЛИ МЕЖСТРОЧНЫЙ ИНТЕРВАЛ --- */
+  line-height: 1.4; 
+  
+  /* --- ВЫРАВНИВАНИЕ ТЕКСТА ПО ЛЕВОМУ КРАЮ --- */
+  text-align: left; 
+  
+  animation: fadeIn 0.3s ease-in-out;
+  z-index: 1001;
+}
+
+/* Стрелочка для тултипа */
+.tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #090A0C transparent transparent transparent;
+}
+
+/* Анимация */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}

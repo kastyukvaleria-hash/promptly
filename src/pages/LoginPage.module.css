@@ -1,0 +1,169 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+   background: linear-gradient(180deg, #181A20 60%, #1e1633 100%);
+}
+
+.contentWrapper {
+  width: 100%;
+  max-width: 400px;
+  position: relative; /* Добавляем для позиционирования градиента */
+  z-index: 1; /* Чтобы контент был выше градиента */
+}
+
+/* --- ГЛАВНАЯ МАГИЯ: СОЗДАЕМ ГРАДИЕНТНЫЙ ФОН --- */
+.contentWrapper::before {
+  content: '';
+  position: absolute;
+  top: 50%; /* Начинаем с середины по вертикали */
+  left: 50%; /* И по горизонтали */
+  transform: translate(-50%, -50%);
+  width: 20%; /* Делаем градиент больше, чем сама карточка */
+  height: 20%;
+  z-index: -1; /* Помещаем его СЗАДИ контента */
+  
+  /* --- САМ ГРАДИЕНТ --- */
+  background-image: radial-gradient(
+    circle,
+    rgba(85, 0, 255, 0.3),  /* Фиолетовый в центре с прозрачностью */
+    rgba(74, 0, 224, 0.1) 30%,
+    rgba(24, 26, 32, 0) 60%  /* Плавно уходит в прозрачный цвет фона */
+  );
+  
+  filter: blur(50px); /* Сильно размываем для мягкого эффекта */
+  opacity: 0.7; /* Можно регулировать общую яркость */
+}
+
+
+.header {
+  text-align: left;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+.header h1 {
+  font-size: 2.4rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: var(--text-primary);
+}
+
+.header h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.formContainer {
+  background-color: rgba(31, 33, 40, 0.8); /* Делаем фон чуть прозрачным, чтобы градиент просвечивал */
+  backdrop-filter: blur(10px); /* Эффект "матового стекла" */
+  padding: 40px 30px;
+  border-radius: 20px;
+  width: 100%;
+  text-align: center;
+
+}
+
+.formContainer h3 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: var(--text-primary);
+}
+
+/* --- Стили инпутов из твоей версии --- */
+.inputGroup {
+  margin-bottom: 25px;
+  text-align: left;
+  position: relative;
+}
+
+.inputGroup label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.inputGroup input {
+  width: 100%;
+  padding: 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  color: var(--text-primary);
+  background-color: #181A20;
+  border: 1px solid var(--border-color); /* Простая рамка для инпутов */
+  border-radius: 12px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.inputGroup input:focus {
+  outline: none;
+  border-color: var(--accent-purple);
+  box-shadow: 0 0 10px -2px var(--accent-purple);
+}
+
+.inputGroup input::placeholder {
+  color: #5a5a7a;
+}
+
+
+/* --- Остальные стили --- */
+.submitButton {
+  width: 100%;
+  padding: 15px;
+  background-color: var(--accent-purple);
+  border: none;
+  border-radius: 10px;
+  color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+.submitButton:hover:not(:disabled) {
+  background-color: var(--accent-purple-hover);
+}
+.submitButton:disabled {
+  background-color: #5a5a7a;
+  cursor: not-allowed;
+}
+.toggleText {
+  margin-top: 25px;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  cursor: pointer;
+  text-decoration: underline;
+}
+.error {
+  color: var(--error-color);
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+}
+
+/* ... твои старые стили ... */
+
+.linksContainer {
+  margin-top: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.message {
+  color: var(--text-primary);
+  background-color: rgba(106, 90, 249, 0.1);
+  border: 1px solid var(--accent-purple);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  text-align: center;
+}

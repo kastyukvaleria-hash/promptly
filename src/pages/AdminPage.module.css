@@ -1,0 +1,110 @@
+/* Стили ТОЛЬКО для страницы AdminPage */
+.container {
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #373A47;
+  padding-bottom: 20px;
+}
+
+.createButton {
+  background-color: #8B6CD1;
+  color: #FFFFFF;
+  padding: 10px 20px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+.createButton:hover {
+  background-color: #7a5cc0;
+}
+
+.error {
+  color: #ff4d4d;
+  background-color: rgba(255, 77, 77, 0.1);
+  border: 1px solid #ff4d4d;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.listContainer {
+  display: grid;
+  gap: 16px;
+}
+
+.listItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1F212B;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1px solid #373A47;
+}
+
+.listItemInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: inherit;
+  text-decoration: none;
+  flex-grow: 1;
+}
+
+.listItemIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.listItemTitle {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.listItemActions {
+  display: flex;
+  gap: 12px;
+}
+
+.actionButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.editButton {
+  background-color: #373A47;
+  color: var(--text-primary);
+}
+.editButton:hover {
+  background-color: #4a4d5c;
+}
+
+.deleteButton {
+  background-color: #ff4d4d20;
+  color: #ff4d4d;
+}
+.deleteButton:hover {
+  background-color: #ff4d4d40;
+}

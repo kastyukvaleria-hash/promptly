@@ -1,0 +1,122 @@
+.container {
+  padding: 40px 20px 120px 20px; /* Добавили отступ снизу */
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  /* --- НОВЫЙ КРАСОЧНЫЙ ФОН --- */
+  background: radial-gradient(circle at 50% 0%, rgba(106, 90, 249, 0.2) 0%, rgba(24, 26, 32, 0) 40%), var(--background-dark);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px; /* Увеличили отступ */
+}
+
+.title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: left;
+  color: #e0e0e0;
+}
+
+.questionsList {
+  display: grid;
+  gap: 40px; /* Увеличили отступ */
+  margin-bottom: 40px;
+}
+
+.questionBlock {
+  background-color: transparent;
+  padding: 0;
+  border: none;
+}
+
+.questionText {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  font-weight: 600;
+  color: #c0c4ff; /* Фиолетовый оттенок */
+}
+
+.answersList {
+  display: grid;
+  gap: 12px;
+}
+
+.answerButton {
+  width: 100%;
+  padding: 16px;
+  background-color: #1F212B;
+  border: 2px solid #373A47;
+  border-radius: 14px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.answerButton:hover {
+  border-color: #8B6CD1;
+  background-color: #2a2d35;
+}
+
+.answerButton.selected {
+  border-color: #8E96FF;
+  background-color: rgba(142, 150, 255, 0.1);
+  box-shadow: 0 0 10px -2px #8E96FF;
+}
+
+.submitButton {
+  composes: primaryButton from global; /* Наследуем наш новый стиль */
+  margin-top: auto; /* Прижимаем кнопку к низу */
+}
+
+.resultContainer {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.resultBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: #1F212B;
+  padding: 40px;
+  border-radius: 20px;
+  width: 100%;
+}
+
+.iconSuccess { color: #86FF99; }
+.iconFail { color: #ff4d4d; }
+
+.resultTitle { font-size: 1.8rem; margin-top: 20px; }
+.resultMessage { color: var(--text-secondary); margin-top: 8px; line-height: 1.5; }
+.resultStats { font-weight: 600; font-size: 1.1rem; margin-top: 20px; margin-bottom: 30px; }
+
+.backButton {
+  composes: primaryButton from global;
+  background: #373A47;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: none;
+}
+
+.error {
+  color: #ff4d4d;
+  background-color: rgba(255, 77, 77, 0.1);
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 20px;
+  width: 100%;
+}

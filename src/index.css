@@ -1,0 +1,72 @@
+/* Глобальный сброс стилей и базовые настройки */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --background-dark: #181A20;
+  --primary-element: #2c2c3e;
+  --accent-purple: #6a5af9;
+  --accent-purple-hover: #5a4ae0;
+  --text-primary: #e0e0e0;
+  --text-secondary: #a0a0b8;
+  --border-color: #4a4a6a;
+  --error-color: #ff4d4d;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--background-dark);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Стилизация скроллбара */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--background-dark); }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-purple); }
+
+/* --- НОВЫЙ ЕДИНЫЙ СТИЛЬ ДЛЯ ГЛАВНЫХ КНОПОК --- */
+.primaryButton {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(90deg, #8B6CD1, #6a5af9);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 14px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 5px 20px -5px rgba(106, 90, 249, 0.4);
+  font-family: 'Montserrat', sans-serif;
+}
+
+.primaryButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px -5px rgba(106, 90, 249, 0.5);
+}
+
+.primaryButton:disabled {
+  background: #373A47;
+  color: #a0a0b8;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* --- НОВЫЙ СТИЛЬ ДЛЯ ФИОЛЕТОВОГО СВЕЧЕНИЯ --- */
+.purpleGlow {
+  position: absolute;
+  top: -200px; /* Положение над экраном */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(106, 90, 249, 0.2) 0%, rgba(24, 26, 32, 0) 60%);
+  z-index: 1; /* Под контентом, но над фоном */
+  pointer-events: none; /* Чтобы не мешало кликам */
+}

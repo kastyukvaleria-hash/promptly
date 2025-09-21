@@ -1,0 +1,48 @@
+import api from './index.js';
+import { getUserHeaders } from './_authHeaders.js';
+
+/**
+ * ВАЖНО:
+ * - /stats/check-in требует X-User-ID (добавляем через getUserHeaders).
+ * - complete-lecture — тоже X-User-ID и X-User-Subscribed.
+ * - complete-section — X-User-ID обязателен; подписка не нужна.
+ */
+const progressService = {
+  // Отмечаем «активный день» (увеличит totalActiveDays и consecutiveDays)
+  dailyCheckIn: async () => {
+    await api.post('/api/progress/stats/check-in', null, {
+      headers: getUserHeaders({ includeSubscribed: true }),
+    });
+  },
+
+  // Завершение лекции
+  completeLecture: async (lectureId, sectionId) => {
+    await api.post(
+      '/api/progress/complete-lecture',
+      { lectureId: Number(lectureId), sectionId: Number(sectionId) },
+      { headers: getUserHeaders({ includeSubscribed: true }) }
+    );
+  },
+
+  // Завершение раздела
+  completeSection: async (sectionOrderIndex, sectionId) => {
+    await api.post(
+      '/api/progress/complete-section',
+      { sectionId: Number(sectionId), sectionOrderIndex: Number(sectionOrderIndex) },
+      { headers: getUserHeaders({ includeSubscribed: false }) }
+    );
+  },
+
+  /**
+   * НЕОБЯЗАТЕЛЬНО. Удобно для ручной проверки из UI/консоли,
+   * если /internal не режется гейтвеем в dev.
+   */
+  getUserStatsUnsafe: async (userId) => {
+    const { data } = await api.get(`/api/progress/internal/stats/users/${userId}`, {
+      headers: getUserHeaders({ includeSubscribed: false }),
+    });
+    return data;
+  },
+};
+
+export default progressService;

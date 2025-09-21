@@ -1,0 +1,159 @@
+.accordion {
+  display: grid;
+  gap: 12px;
+}
+
+.noPrompts {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 20px;
+}
+
+.section {
+  background-color: #1F212B;
+  border-radius: 16px;
+  transition: all 0.3s ease-in-out;
+  border: 2px solid #373A47;
+}
+
+.section.open {
+  border-color: #8E96FF;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+}
+
+.chevron {
+  transition: transform 0.3s ease-in-out;
+}
+
+.section.open .chevron {
+  transform: rotate(180deg);
+}
+
+.sectionContent {
+  padding: 0 20px 20px 20px;
+  border-top: 1px solid #373A47;
+}
+
+.searchWrapper {
+  position: relative;
+  margin: 16px 0;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 12px 12px 12px 40px;
+  background-color: #181A20;
+  border: 1px solid #373A47;
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+}
+
+.promptsList {
+  display: grid;
+  gap: 16px;
+}
+
+.promptItem {
+  background-color: #181A20;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.promptHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.promptHeader h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.copyButton {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+}
+.copyButton:hover {
+  color: #8E96FF;
+}
+
+/* --- ВОТ ОНО, ФИНАЛЬНОЕ ИСПРАВЛЕНИЕ --- */
+
+.promptTextWrapper {
+  position: relative; /* Нужно для позиционирования градиента */
+}
+
+.promptText {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.6; /* Фиксируем высоту строки */
+  white-space: pre-wrap;
+}
+
+/* Стили для свернутого текста */
+.collapsed .promptText {
+  /* Обрезаем текст по высоте 6 строк (6 * 1.6em) */
+  max-height: 9.6em; 
+  overflow: hidden;
+  /* Убираем капризную маску */
+}
+
+/* ПСЕВДОЭЛЕМЕНТ ДЛЯ ГРАДИЕНТА - это надежнее */
+.collapsed::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4em; /* Высота градиента */
+  /* Градиент от прозрачного к цвету фона карточки */
+  background: linear-gradient(to bottom, transparent, #181A20);
+  /* Запрещаем клики по градиенту, чтобы можно было выделить текст под ним */
+  pointer-events: none;
+}
+
+.toggleButton {
+  background: none;
+  border: none;
+  color: #8E96FF;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
