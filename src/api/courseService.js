@@ -1,11 +1,11 @@
-// src/api/courseService.js
 import api from './index.js';
 import { getUserHeaders } from './_authHeaders.js';
 
 const courseService = {
   getCourseOutline: async () => {
     const cacheBust = `?_cb=${Date.now()}`;
-    const { data } = await api.get(`/api/courses/user/outline${cacheBust}`, {
+    // --- ИСПРАВЛЕНИЕ: Убираем только /api ---
+    const { data } = await api.get(`/courses/user/outline${cacheBust}`, {
       headers: {
         ...getUserHeaders({ includeSubscribed: true }),
         'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -16,11 +16,11 @@ const courseService = {
     return data;
   },
 
-  // опционально — максимально агрессивный бить кэш (если надо где-то вручную дернуть)
   getCourseOutlineForce: async () => {
     const ts = Date.now();
     const rnd = Math.random().toString(36).slice(2);
-    const { data } = await api.get(`/api/courses/user/outline?_cb=${ts}&_r=${rnd}`, {
+    // --- ИСПРАВЛЕНИЕ: Убираем только /api ---
+    const { data } = await api.get(`/courses/user/outline?_cb=${ts}&_r=${rnd}`, {
       headers: {
         ...getUserHeaders({ includeSubscribed: true }),
         'Cache-Control': 'no-cache, no-store, must-revalidate, proxy-revalidate',
@@ -34,7 +34,8 @@ const courseService = {
   },
 
   getLectureContent: async (lectureId) => {
-    const { data } = await api.get(`/api/courses/user/lectures/${lectureId}`, {
+    // --- ИСПРАВЛЕНИЕ: Убираем только /api ---
+    const { data } = await api.get(`/courses/user/lectures/${lectureId}`, {
       headers: getUserHeaders({ includeSubscribed: true }),
     });
     return data;

@@ -2,23 +2,22 @@ import api from './index.js';
 
 const userService = {
   getProfile: async () => {
-    // Возвращаем /users, чтобы компенсировать @RequestMapping
-    const { data } = await api.get('/api/users/users/profile');
+    // Убираем /api, оставляем /users/users...
+    const { data } = await api.get('/users/users/profile');
     return data;
   },
   
   getPrompts: async () => {
-    // Возвращаем /users здесь тоже
-    const { data } = await api.get('/api/users/users/profile/prompts');
+    // Убираем /api
+    const { data } = await api.get('/users/users/profile/prompts');
     return data;
   },
 
   updateAvatar: async (avatarId) => {
-    // И здесь тоже
-    await api.put('/api/users/users/profile/avatar', { avatarId });
+    // Убираем /api
+    await api.put('/users/users/profile/avatar', { avatarId });
   },
 
-  // --- ВОТ ДОБАВЛЕННЫЙ МЕТОД С ПРАВИЛЬНЫМ URL ---
   /**
    * Привязывает email и пароль к текущему Telegram-аккаунту
    * или выполняет слияние с существующим.
@@ -27,8 +26,8 @@ const userService = {
    * @returns {Promise<void>}
    */
   linkAccount: async (email, password) => {
-    // Добавляем префикс /users и сюда
-    await api.post('/api/users/users/profile/link-account', { email, password });
+    // Убираем /api
+    await api.post('/users/users/profile/link-account', { email, password });
   },
 };
 

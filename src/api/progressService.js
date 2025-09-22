@@ -10,15 +10,17 @@ import { getUserHeaders } from './_authHeaders.js';
 const progressService = {
   // Отмечаем «активный день» (увеличит totalActiveDays и consecutiveDays)
   dailyCheckIn: async () => {
-    await api.post('/api/progress/stats/check-in', null, {
+    // Убираем /api
+    await api.post('/progress/stats/check-in', null, {
       headers: getUserHeaders({ includeSubscribed: true }),
     });
   },
 
   // Завершение лекции
   completeLecture: async (lectureId, sectionId) => {
+    // Убираем /api
     await api.post(
-      '/api/progress/complete-lecture',
+      '/progress/complete-lecture',
       { lectureId: Number(lectureId), sectionId: Number(sectionId) },
       { headers: getUserHeaders({ includeSubscribed: true }) }
     );
@@ -26,8 +28,9 @@ const progressService = {
 
   // Завершение раздела
   completeSection: async (sectionOrderIndex, sectionId) => {
+    // Убираем /api
     await api.post(
-      '/api/progress/complete-section',
+      '/progress/complete-section',
       { sectionId: Number(sectionId), sectionOrderIndex: Number(sectionOrderIndex) },
       { headers: getUserHeaders({ includeSubscribed: false }) }
     );
@@ -38,7 +41,8 @@ const progressService = {
    * если /internal не режется гейтвеем в dev.
    */
   getUserStatsUnsafe: async (userId) => {
-    const { data } = await api.get(`/api/progress/internal/stats/users/${userId}`, {
+    // Убираем /api
+    const { data } = await api.get(`/progress/internal/stats/users/${userId}`, {
       headers: getUserHeaders({ includeSubscribed: false }),
     });
     return data;

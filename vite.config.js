@@ -6,11 +6,10 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      // Любой запрос, который начинается с /api, будет перенаправлен на http://localhost:9090
       '/api': {
         target: 'http://localhost:9090',
         changeOrigin: true,
-        // Можно добавить логов, чтобы видеть, как работает прокси
+        // Возвращаем твои логи, они важны для отладки
         configure: (proxy, _options) => {
           proxy.on('error', (err, _req, _res) => {
             console.log('proxy error', err);

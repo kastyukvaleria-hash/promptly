@@ -1,23 +1,24 @@
-// src/api/index.js
 import axios from 'axios';
 
-/**
- * Базовый инстанс Axios.
- * baseURL не задаём — Vite proxy сам прокидывает /api/* на нужный бэкенд.
- * withCredentials включаем на случай cookie (если не нужны — можно убрать).
- */
+// 1. Читаем базовый URL из переменной окружения
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+if (!API_BASE_URL) {
+  alert("Критическая ошибка: VITE_API_BASE_URL не определена в .env файле!");
+}
+
 const api = axios.create({
-  baseURL: '',
+  // 2. Устанавливаем базовый URL, который мы прочитали
+  baseURL: API_BASE_URL,
+  
+  // 3. Весь остальной "пуленепробиваемый" код твоего друга
   withCredentials: true,
-  timeout: 30000, // чтобы не висеть бесконечно на сетевых глюках
+  timeout: 30000,
   headers: {
     'Accept': 'application/json',
   },
 });
 
-/**
- * Безопасное чтение токена из localStorage
- */
 function getAuthToken() {
   try {
     return localStorage.getItem('authToken') || '';
@@ -26,30 +27,22 @@ function getAuthToken() {
   }
 }
 
-/**
- * Явно определяем "публичные" роуты, куда не надо слать Authorization
- * (у тебя это всё, что содержит /api/users/auth/).
- */
 function isPublicRoute(url = '') {
   try {
-    // url может быть относительным (/api/...), абсолютным (http...), или пустым
-    return typeof url === 'string' && url.includes('/api/users/auth/');
+    // Эта проверка правильная, так как все публичные роуты содержат /auth/
+    return typeof url === 'string' && url.includes('/users/auth/');
   } catch {
     return false;
   }
 }
 
-/**
- * REQUEST interceptor:
- *  - добавляем Authorization: Bearer <token> для НЕпубличных ручек
- */
 api.interceptors.request.use(
   (config) => {
     const url = config?.url || '';
     const token = getAuthToken();
 
+    // Эта логика тоже абсолютно правильная
     if (token && !isPublicRoute(url)) {
-      // Не перетираем, если кто-то уже явно поставил заголовок выше по стеку
       if (!config.headers) config.headers = {};
       if (!config.headers.Authorization) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -61,21 +54,14 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-/**
- * RESPONSE interceptor:
- *  - логируем ошибки с адресом и статусом
- */
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     const url = error?.config?.url ?? 'Unknown URL';
     const status = error?.response?.status;
     const payload = error?.response?.data;
-
-    // Этот лог помогает быстро ловить, что именно упало
-    console.error(`[AXIOS ERROR] ${status || 'NO_STATUS'} @ ${url}`, payload);
-
-    // Прокидываем дальше, чтобы вызывать .catch() в сервисах
+    // Используем его надежное логирование
+    console.error(`[AXIOS ERROR] ${status || 'NO_STATUS'} @ ${API_BASE_URL}${url}`, payload);
     return Promise.reject(error);
   }
 );

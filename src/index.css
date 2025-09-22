@@ -3,6 +3,10 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  /* --- НАЧАЛО ИЗМЕНЕНИЙ --- */
+  /* Убираем синюю подсветку при нажатии на мобильных устройствах */
+  -webkit-tap-highlight-color: transparent;
+  /* --- КОНЕЦ ИЗМЕНЕНИЙ --- */
 }
 
 :root {
