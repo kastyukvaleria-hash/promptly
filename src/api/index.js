@@ -11,7 +11,7 @@ const api = axios.create({
   // 2. Устанавливаем базовый URL, который мы прочитали
   baseURL: API_BASE_URL,
   
-  // 3. Весь остальной "пуленепробиваемый" код твоего друга
+  // 3. Весь остальной "пуленепробиваемый" код
   withCredentials: true,
   timeout: 30000,
   headers: {
@@ -29,7 +29,6 @@ function getAuthToken() {
 
 function isPublicRoute(url = '') {
   try {
-    // Эта проверка правильная, так как все публичные роуты содержат /auth/
     return typeof url === 'string' && url.includes('/users/auth/');
   } catch {
     return false;
@@ -41,7 +40,6 @@ api.interceptors.request.use(
     const url = config?.url || '';
     const token = getAuthToken();
 
-    // Эта логика тоже абсолютно правильная
     if (token && !isPublicRoute(url)) {
       if (!config.headers) config.headers = {};
       if (!config.headers.Authorization) {
@@ -54,16 +52,36 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// --- НАЧАЛО ГЛАВНОГО ИСПРАВЛЕНИЯ ---
 api.interceptors.response.use(
+  // Если ответ успешный, просто возвращаем его
   (response) => response,
+  
+  // Если произошла ошибка
   (error) => {
+    // Проверяем, есть ли вообще ответ от сервера и какой у него статус
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      // ОШИБКА 401 (Unauthorized) или 403 (Forbidden) - это значит, что токен невалидный или истек.
+      
+      console.error("Перехвачена ошибка авторизации (401/403). Выполняем выход...");
+      
+      // 1. Удаляем невалидный токен из хранилища
+      localStorage.removeItem('authToken');
+      
+      // 2. Принудительно перезагружаем страницу и отправляем на логин.
+      // Это самый надежный способ полностью сбросить состояние приложения.
+      window.location.href = '/login';
+    }
+    
+    // Для всех остальных ошибок, просто логируем их и пробрасываем дальше
     const url = error?.config?.url ?? 'Unknown URL';
     const status = error?.response?.status;
     const payload = error?.response?.data;
-    // Используем его надежное логирование
     console.error(`[AXIOS ERROR] ${status || 'NO_STATUS'} @ ${API_BASE_URL}${url}`, payload);
+    
     return Promise.reject(error);
   }
 );
+// --- КОНЕЦ ГЛАВНОГО ИСПРАВЛЕНИЯ ---
 
 export default api;
