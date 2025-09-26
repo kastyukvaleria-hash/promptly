@@ -1,0 +1,77 @@
+/* src/components/common/HomePageSkeleton.module.css */
+
+.container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.header {
+  padding-top: 20px;
+  margin-bottom: 30px;
+}
+
+.livesWrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.titleWrapper {
+  text-align: left;
+}
+
+.sectionsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* --- Стили для самих заглушек --- */
+
+.placeholder {
+  background: linear-gradient(90deg, #1F212B, #2a2d35, #1F212B);
+  background-size: 200% 100%;
+  border-radius: 12px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.lives {
+  width: 100px;
+  height: 36px;
+  border-radius: 16px;
+}
+
+.title {
+  width: 150px;
+  height: 30px;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  width: 220px;
+  height: 30px;
+}
+
+.overallProgress {
+  width: 100%;
+  height: 125px;
+  border-radius: 20px;
+  margin-bottom: 24px;
+}
+
+.sectionCard {
+  width: 100%;
+  height: 120px;
+  border-radius: 20px;
+}

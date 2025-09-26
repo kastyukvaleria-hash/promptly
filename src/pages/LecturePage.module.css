@@ -1,8 +1,8 @@
+/* src/pages/LecturePage.module.css */
 .pageWrapper {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  /* --- ВОЗВРАЩАЕМ СТИЛИ ДЛЯ СВЕЧЕНИЯ --- */
   position: relative;
   overflow-x: hidden;
 }
@@ -26,8 +26,8 @@
 .container {
   padding: 20px;
   padding-bottom: 120px;
-  padding-top: 80px; /* Отступ от зафиксированной шапки */
-  z-index: 2; /* Контент должен быть над свечением */
+  padding-top: 80px;
+  z-index: 2;
   position: relative;
 }
 
@@ -49,6 +49,7 @@
   align-items: center;
   justify-content: center;
 }
+
 .backButton:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
@@ -56,6 +57,13 @@
 .contentWrapper {
   max-width: 680px;
   margin: 0 auto;
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.contentWrapper.clickable {
+  cursor: pointer;
 }
 
 .title {
@@ -66,17 +74,57 @@
   color: var(--text-primary);
 }
 
-.contentText {
+.lectureTextContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+  flex-grow: 1;
+}
+
+.paragraph {
   font-size: 1.1rem;
   line-height: 1.8;
   color: var(--text-secondary);
   white-space: pre-wrap;
+  /* --- ИЗМЕНЕНИЕ: Ускоряем анимацию --- */
+  transition: opacity 0.35s ease-in-out, filter 0.35s ease-in-out;
+  margin: 0;
 }
 
-.contentText p {
-  margin-bottom: 1.5em;
+.paragraph.visible {
+  opacity: 1;
+  filter: blur(0);
+}
+
+.paragraph.preview {
+  opacity: 0.1;
+  filter: blur(4px);
+  user-select: none; 
+}
+
+.clickHint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 40px;
+  color: var(--text-secondary);
+  opacity: 0.6;
+  animation: pulseHint 2s infinite ease-in-out;
+}
+
+@keyframes pulseHint {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
 }
 
 .footer {
-  margin-top: 40px;
+  margin-top: auto;
+  padding-top: 40px;
+  animation: fadeInFooter 0.5s ease-in-out;
+}
+
+@keyframes fadeInFooter {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }

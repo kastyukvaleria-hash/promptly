@@ -1,13 +1,14 @@
+/* src/pages/PremiumPage.module.css */
 .container {
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
-  padding: 40px 20px 120px 20px;
-   background: linear-gradient(180deg, #181A20 60%, #3b3250 100%);
+  padding: 40px 20px; /* <-- ИСПРАВЛЕНО */
+  background-color: var(--background-dark);
   min-height: 100vh;
-  
+  position: relative;
+  overflow: hidden;
 }
-
 .loading {
   display: flex;
   align-items: center;
@@ -15,6 +16,11 @@
   min-height: 80vh;
   font-size: 1.2rem;
 }
+
+/* 
+  Весь остальной код до конца файла остается без изменений...
+  ...просто убедитесь, что он есть в вашем файле...
+*/
 
 .header {
   display: flex;
@@ -69,7 +75,6 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  
 }
 
 .iconWrapper {
@@ -82,27 +87,18 @@
   border-radius: 50%;
   background: linear-gradient(180deg, #C0C4FF 0%, #8E96FF 100%);
   color: #181A20; 
-  
 }
 
 .featureContent h3 {
   font-size: 1rem;
   font-weight: 600;
   margin-bottom: 4px;
-  
-  
 }
 
 .featureContent p {
   font-size: 0.85rem;
   color: var(--text-secondary);
   line-height: 1.4;
-  
-}
-
-.featureContent p span {
-  color: #C0C4FF;
-  font-weight: 600;
 }
 
 .plansContainer {
@@ -116,13 +112,11 @@
   padding: 24px;
   position: relative;
   overflow: hidden;
-  border: 2px solid transparent; /* Добавляем прозрачную рамку, чтобы размеры не скакали */
-
+  border: 2px solid transparent;
 }
 
-/* --- ВОТ ОНО, ГЛАВНОЕ ИЗМЕНЕНИЕ --- */
-/* Применяем обводку ТОЛЬКО к первой карточке в контейнере */
 .planCard:first-child {
+  border-color: #8B6CD1;
 }
 
 .planCard h4 {
@@ -130,7 +124,6 @@
   font-weight: 600;
   color: var(--text-secondary);
   margin-bottom: 4px;
-  
 }
 
 .planCard h2 {
@@ -141,7 +134,7 @@
 
 .price {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 8px;
   margin-bottom: 20px;
 }
@@ -169,20 +162,6 @@
 .planFeatures svg {
   color: #86FF99;
   flex-shrink: 0;
-  
-}
-
-.activeButton {
-  width: 100%;
-  padding: 14px;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 12px;
-  border: none;
-  cursor: not-allowed;
-  background-color: #2F4B3D;
-  color: #97A59E;
-  
 }
 
 .recommendBadge {
@@ -197,9 +176,6 @@
   padding: 6px 0;
   background: linear-gradient(90deg, #FFB8E0, #BE9EFF, #88C0FC, #86FF99);
   color: #181A20;
-  
-  
-  
 }
 
 .ctaButton {
@@ -213,8 +189,6 @@
   background-color: #969EFE;
   color: #181A20;
   transition: transform 0.2s ease;
-  
-  
 }
 
 .ctaButton:hover:not(:disabled) {
@@ -225,4 +199,51 @@
   background-color: #4A4A6A;
   color: var(--text-secondary);
   cursor: not-allowed;
+}
+
+.activePremiumButton {
+  composes: ctaButton;
+  background: #2a2d35;
+  color: #8E96FF;
+  cursor: default;
+  border: 1px solid #8E96FF;
+}
+.activePremiumButton:hover {
+  transform: none;
+}
+
+.activeButton {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  border: none;
+  cursor: not-allowed;
+  background-color: #2F4B3D;
+  color: #97A59E;
+}
+
+.basicButton {
+  composes: activeButton;
+  background-color: #373A47;
+  color: var(--text-secondary);
+}
+
+/* --- НОВЫЙ КОД ДЛЯ СВЕЧЕНИЯ ВНИЗУ --- */
+.container::after {
+  content: '';
+  position: absolute;
+  /* Прижимаем к низу */
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  /* Делаем его широким и невысоким */
+  width: 150%;
+  height: 400px; 
+  /* Создаем красивый радиальный градиент */
+  background: radial-gradient(circle, rgba(90, 60, 158, 0.25) 0%, rgba(24, 26, 32, 0) 70%);
+  z-index: 0; /* Размещаем под контентом */
+  /* Запрещаем ему перехватывать клики мыши */
+  pointer-events: none;
 }

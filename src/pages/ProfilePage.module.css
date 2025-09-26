@@ -1,7 +1,9 @@
+/* src/pages/ProfilePage.module.css */
 .container {
   padding: 20px;
   padding-bottom: 120px;
 }
+
 .message {
   display: flex;
   justify-content: center;
@@ -9,6 +11,7 @@
   height: 80vh;
   color: var(--text-secondary);
 }
+
 .header {
   display: flex;
   justify-content: flex-end;
@@ -19,7 +22,7 @@
   background-color: #1F212B;
   border-radius: 20px;
   padding: 24px;
-  margin-bottom: 24px;
+  margin-bottom: 15px;
   border: none;
 }
 
@@ -40,6 +43,7 @@
   cursor: pointer;
   flex-shrink: 0;
 }
+
 .avatarButton img {
   width: 100%;
   height: 100%;
@@ -51,46 +55,51 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  flex-grow: 1; 
-  /* Важно, чтобы родительский блок мог сжиматься и обрезать дочерний */
+  flex-grow: 1;
   min-width: 0;
 }
 
-.nickname {
+/* --- НАЧАЛО ИЗМЕНЕНИЙ (ПУНКТ 4) --- */
+.nicknameButton {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
   font-size: 1.5rem;
   font-weight: 600;
   margin-bottom: 4px;
   color: var(--text-primary);
-  
-  /* --- НАЧАЛО ИЗМЕНЕНИЙ --- */
-  
-  /* 1. Запрещаем перенос на новую строку */
+  cursor: pointer;
   white-space: nowrap;
-  
-  /* 2. Обрезаем текст, который не помещается */
   overflow: hidden;
-  
-  /* 3. Добавляем многоточие в конце */
   text-overflow: ellipsis;
-  
-  /* 4. Явно указываем максимальную ширину (важно!) */
-  /* Она будет равна 100% от родительского блока `.userText` */
-  width: 100%; /* Заменяем max-width на width для более предсказуемого поведения */
-  
-  /* --- КОНЕЦ ИЗМЕНЕНИЙ --- */
-}
-.bio {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  margin-bottom: 16px;
+  width: 100%;
+  text-align: left; /* Важно для кнопки */
 }
 
+.nicknameButton:hover {
+  color: #c0c4ff;
+}
+/* --- КОНЕЦ ИЗМЕНЕНИЙ --- */
+
+/* --- НАЧАЛО ИЗМЕНЕНИЙ (ПУНКТ 1) --- */
+.bio {
+  color: var(--text-secondary);
+  font-size: 0.8rem; /* УМЕНЬШИЛИ ШРИФТ */
+  margin-bottom: 16px;
+}
+/* --- КОНЕЦ ИЗМЕНЕНИЙ --- */
+
+/* --- НАЧАЛО ИЗМЕНЕНИЙ (ПУНКТ 2) --- */
 .badges {
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap; /* Добавили перенос на всякий случай */
+  gap: 10px; /* УМЕНЬШИЛИ РАССТОЯНИЕ */
   width: 100%;
   justify-content: flex-start;
 }
+/* --- КОНЕЦ ИЗМЕНЕНИЙ --- */
+
 .badge {
   padding: 6px 12px;
   border-radius: 10px;
@@ -140,9 +149,10 @@
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 32px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
+
 .statCard {
   background-color: #1F212B;
   border-radius: 20px;
@@ -174,6 +184,7 @@
   padding: 20px;
   border: none;
 }
+
 .sectionTitle {
   display: flex;
   align-items: center;
@@ -183,6 +194,7 @@
   margin-bottom: 20px;
   color: #C9CDFF;
 }
+
 .sectionTitle svg {
   font-size: 28px;
   color: #C9CDFF;

@@ -21,7 +21,7 @@
 }
 
 .title, .subtitle {
-  font-size: 1.9rem;
+  font-size: 1.8rem;
   font-weight: 600;
   color: var(--text-primary);
   line-height: 1.2;
@@ -46,12 +46,10 @@
   transform: scale(1.02);
 }
 
-/* --- ИСПРАВЛЕНО: ОТСТУПЫ У БЛОКА С ПРОГРЕССОМ --- */
 .overallProgress {
   background-color: var(--primary-element);
   border-radius: 20px;
   padding: 20px;
-  /* УБРАЛИ ОГРОМНЫЙ НИЖНИЙ ОТСТУП */
   margin-bottom: 24px; 
 }
 
@@ -93,18 +91,23 @@
   transition: width 0.5s ease-in-out;
 }
 
-/* --- ИСПРАВЛЕНО: ОТСТУПЫ МЕЖДУ КАРТОЧКАМИ --- */
 .sectionsList {
-  display: flex; /* Включаем flexbox для управления отступами */
-  flex-direction: column; /* Элементы будут в колонку */
-  gap: 16px; /* --- ДОБАВЛЯЕМ ОТСТУП В 16px МЕЖДУ КАЖДОЙ КАРТОЧКОЙ --- */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
+/* --- НАЧАЛО ИЗМЕНЕНИЙ --- */
 .message {
   display: flex;
+  /* Ставим элементы друг под другом */
+  flex-direction: column; 
   justify-content: center;
   align-items: center;
   height: 30vh;
   font-size: 1.2rem;
   color: var(--text-secondary);
+  /* Добавляем отступ между текстом и кнопкой */
+  gap: 20px; 
 }
+/* --- КОНЕЦ ИЗМЕНЕНИЙ --- */

@@ -1,42 +1,61 @@
 // src/pages/HomePage.jsx
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; // <-- Добавили useState
 import { Link } from 'react-router-dom';
 import { useCourseData } from '../context/CourseContext.jsx';
 import { useAuth } from '../hooks/useAuth.js';
 import LivesIndicator from '../components/common/LivesIndicator.jsx';
 import SectionCard from '../components/courses/SectionCard.jsx';
+import HomePageSkeleton from '../components/common/HomePageSkeleton.jsx';
 import styles from './HomePage.module.css';
 
 const HomePage = () => {
-  const { courseData, isLoading, error, reloadCourseData } = useCourseData();
+  // --- НАЧАЛО ИЗМЕНЕНИЙ ---
+  // Убираем isLoading, так как у нас будет своя, более умная логика
+  const { courseData, error, reloadCourseData } = useCourseData();
   const { user } = useAuth();
+  
+  // Новое состояние, которое будет управлять показом скелета
+  const [isPreparing, setIsPreparing] = useState(true);
 
   useEffect(() => {
-    reloadCourseData();
+    // Создаем асинхронную функцию, чтобы красиво все обработать
+    const preparePage = async () => {
+      try {
+        // Запускаем ДВА процесса одновременно и ждем, пока ОБА завершатся
+        await Promise.all([
+          reloadCourseData(), // 1. Загрузка данных
+          new Promise(resolve => setTimeout(resolve, 800)) // 2. Таймер на 1 секунду
+        ]);
+      } catch (err) {
+        // Если во время загрузки данных произойдет ошибка, мы ее проигнорируем здесь,
+        // потому что `useCourseData` сам сохранит эту ошибку в `error`
+        console.error("Ошибка при загрузке данных курса, будет показан экран ошибки.", err);
+      } finally {
+        // Этот блок выполнится в любом случае: и при успехе, и при ошибке.
+        // Он уберет скелет-загрузчик.
+        setIsPreparing(false);
+      }
+    };
+
+    preparePage();
+    // Мы хотим, чтобы это выполнялось только один раз при заходе на страницу,
+    // поэтому массив зависимостей оставляем таким.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  // --- КОНЕЦ ИЗМЕНЕНИЙ ---
 
-  if (isLoading) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.message}>
-          Загрузка курса...
-          <br />
-          <button onClick={() => reloadCourseData(true)} style={{ marginTop: '10px' }}>
-            Принудительно перезагрузить
-          </button>
-        </div>
-      </div>
-    );
+  // Теперь главный индикатор загрузки - это наше новое состояние `isPreparing`
+  if (isPreparing) {
+    return <HomePageSkeleton />;
   }
 
   if (error) {
     return (
       <div className={styles.container}>
         <div className={styles.message}>
-          Не удалось загрузить курс.
-          <button onClick={() => reloadCourseData()} style={{ marginLeft: '10px' }}>
-            Попробовать снова
+          <p>Не удалось загрузить курс.</p>
+          <button onClick={() => window.location.reload()} className="primaryButton">
+            Перезагрузить страницу
           </button>
         </div>
       </div>
@@ -49,7 +68,7 @@ const HomePage = () => {
         <header className={styles.header}>
           <div className={styles.titleWrapper}>
             <h1 className={styles.title}>Привет 👋</h1>
-            <h2 className={styles.subtitle}>Пора учить промты!</h2>
+            <h2 className={styles.subtitle}>Пора учить промпты!</h2>
           </div>
         </header>
 
@@ -78,7 +97,7 @@ const HomePage = () => {
         </div>
         <div className={styles.titleWrapper}>
           <h1 className={styles.title}>Привет 👋</h1>
-          <h2 className={styles.subtitle}>Пора учить промты!</h2>
+          <h2 className={styles.subtitle}>Пора учить промпты!</h2>
         </div>
       </header>
 

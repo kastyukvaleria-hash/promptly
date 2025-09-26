@@ -17,11 +17,13 @@
 .createButton {
   background-color: #8B6CD1;
   color: #FFFFFF;
-  padding: 10px 20px;
+  padding: 3px 3px;
   border-radius: 8px;
   text-decoration: none;
   font-weight: 600;
   transition: background-color 0.2s;
+   font-size: 0.6rem;
+   
 }
 .createButton:hover {
   background-color: #7a5cc0;
@@ -72,7 +74,7 @@
 
 .listItemTitle {
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .listItemActions {
@@ -107,4 +109,41 @@
 }
 .deleteButton:hover {
   background-color: #ff4d4d40;
+}
+
+/* --- Обертка для кнопок в шапке (если их несколько) --- */
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* --- Стили для самой кнопки "На главную" --- */
+.homeButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #373A47;
+  color: var(--text-primary);
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.homeButton:hover {
+  background-color: #4a4d5c;
+}
+
+.homeButton svg {
+  font-size: 1.2rem;
+}
+
+/* --- ИЗМЕНЕНИЕ: Убираем отступ у контейнера, чтобы шапка была выше --- */
+.container {
+  padding: 20px 40px 40px 40px; /* Уменьшаем верхний отступ */
+  max-width: 800px;
+  margin: 0 auto;
 }

@@ -1,12 +1,18 @@
+// src/pages/ProfilePage.jsx
 import React, { useState, useEffect } from 'react';
+// --- НАЧАЛО ИЗМЕНЕНИЙ (ИСПРАВЛЕНЫ ПУТИ) ---
+import { useAuth } from '../hooks/useAuth.js';
 import userService from '../api/userService.js';
 import { getAvatarById } from '../utils/avatarUtils.js';
+// --- КОНЕЦ ИЗМЕНЕНИЙ ---
 import PromptAccordion from '../components/profile/PromptAccordion.jsx';
 import LivesIndicator from '../components/common/LivesIndicator.jsx';
 import Modal from '../components/common/Modal.jsx';
 import AvatarSelectionModal from '../components/profile/AvatarSelectionModal.jsx';
 import { useCourseData } from '../context/CourseContext.jsx';
 import { IoPodiumOutline, IoFlameOutline, IoCalendarOutline, IoDocumentTextOutline } from 'react-icons/io5';
+import ProfilePageSkeleton from '../components/profile/ProfilePageSkeleton.jsx';
+import LogoutConfirmationModal from '../components/profile/LogoutConfirmationModal.jsx';
 import styles from './ProfilePage.module.css';
 
 const getUserRank = (activeDays) => {
@@ -18,12 +24,15 @@ const getUserRank = (activeDays) => {
 
 const ProfilePage = () => {
   const { courseData, isLoading: isCourseLoading } = useCourseData();
+  const { logout } = useAuth();
   
   const [profileData, setProfileData] = useState(null);
   const [promptsData, setPromptsData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -48,12 +57,12 @@ const ProfilePage = () => {
 
   const handleAvatarSelect = async (newAvatarId) => {
     if (!profileData || profileData.avatarId === newAvatarId) {
-      setIsModalOpen(false);
+      setIsAvatarModalOpen(false);
       return;
     }
     const oldAvatarId = profileData.avatarId;
     setProfileData(prevData => ({ ...prevData, avatarId: newAvatarId }));
-    setIsModalOpen(false);
+    setIsAvatarModalOpen(false);
     try {
       await userService.updateAvatar(newAvatarId);
     } catch (error) {
@@ -64,7 +73,7 @@ const ProfilePage = () => {
   };
 
   if (isLoading) {
-    return <div className={styles.message}>Загрузка профиля...</div>;
+    return <ProfilePageSkeleton />;
   }
 
   if (error || !profileData) {
@@ -72,9 +81,8 @@ const ProfilePage = () => {
   }
 
   const rank = getUserRank(profileData.totalActiveDays);
-  // --- ВОТ ОН, ФИНАЛЬНЫЙ ФИКС ---
-  // Используем `subscribed`, как в JSON от Данилы
   const isSubscribed = profileData.subscribed;
+  const isAccountLinked = profileData.isEmailPasswordLinked || false;
 
   return (
     <>
@@ -88,15 +96,16 @@ const ProfilePage = () => {
         <main>
           <section className={styles.userCard}>
             <div className={styles.userInfo}>
-              <button className={styles.avatarButton} onClick={() => setIsModalOpen(true)}>
+              <button className={styles.avatarButton} onClick={() => setIsAvatarModalOpen(true)}>
                 <img src={getAvatarById(profileData.avatarId)} alt="Аватар" />
               </button>
               <div className={styles.userText}>
-                <h1 className={styles.nickname}>@{profileData.nickname}</h1>
-                <p className={styles.bio}>Изучаю промт инжиниринг</p>
+                <button className={styles.nicknameButton} onClick={() => setIsLogoutModalOpen(true)}>
+                  @{profileData.nickname}
+                </button>
+                <p className={styles.bio}>Изучаю промт-инженеринг</p>
                 <div className={styles.badges}>
                   <span className={styles.badge} data-rank={rank.toLowerCase()}>{rank}</span>
-                  {/* --- ТЕПЕРЬ ЭТА ПРОВЕРКА БУДЕТ РАБОТАТЬ --- */}
                   <span className={`${styles.badge} ${isSubscribed ? styles.premiumBadge : styles.baseBadge}`}>
                     {isSubscribed ? 'Премиум' : 'Базовый'}
                   </span>
@@ -134,13 +143,25 @@ const ProfilePage = () => {
       </div>
 
       <Modal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isAvatarModalOpen} 
+        onClose={() => setIsAvatarModalOpen(false)}
         title="Выберите аватар"
       >
         <AvatarSelectionModal 
           onSelect={handleAvatarSelect}
           currentAvatarId={profileData.avatarId}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={isLogoutModalOpen}
+        onClose={() => setIsLogoutModalOpen(false)}
+        title="Выход"
+      >
+        <LogoutConfirmationModal
+          onClose={() => setIsLogoutModalOpen(false)}
+          onLogout={logout}
+          isAccountLinked={isAccountLinked}
         />
       </Modal>
     </>

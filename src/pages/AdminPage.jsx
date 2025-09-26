@@ -1,9 +1,11 @@
+// src/pages/AdminPage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import adminService from '../api/adminService.js';
 import styles from './AdminPage.module.css'; 
 import { getIconConfigById } from '../utils/iconUtils.jsx';
-import { IoPencil, IoTrash, IoClipboardOutline } from 'react-icons/io5';
+// --- ИЗМЕНЕНИЕ: Добавили иконку IoHomeOutline ---
+import { IoPencil, IoTrash, IoClipboardOutline, IoHomeOutline } from 'react-icons/io5';
 
 const AdminPage = () => {
   const navigate = useNavigate();
@@ -76,16 +78,24 @@ const AdminPage = () => {
 
   return (
     <div className={styles.container}>
+      {/* --- ИЗМЕНЕНИЕ: Обновленная шапка с кнопкой --- */}
       <header className={styles.header}>
         <h1>Управление разделами</h1>
-        <Link 
-          to="/admin/create-section" 
-          state={{ nextOrderIndex: sections.length + 1 }}
-          className={styles.createButton}
-        >
-          + Создать раздел
-        </Link>
+        <div className={styles.headerActions}>
+          <Link 
+            to="/admin/create-section" 
+            state={{ nextOrderIndex: sections.length + 1 }}
+            className={styles.createButton}
+          >
+            + Создать раздел
+          </Link>
+          <button onClick={() => navigate('/')} className={styles.homeButton}>
+            <IoHomeOutline />
+            На главную
+          </button>
+        </div>
       </header>
+      
       {error && <p className={styles.error}>{error}</p>}
       {renderContent()}
     </div>
