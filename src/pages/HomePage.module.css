@@ -4,7 +4,6 @@
   max-width: 600px;
   margin: 0 auto;
   padding: 0 20px;
-  /* --- ИЗМЕНЕНИЕ: Добавляем, чтобы скрыть "второй" слайд --- */
   overflow-x: hidden;
 }
 
@@ -64,7 +63,7 @@
 }
 
 .progressTitle {
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text-primary);
 }
 
@@ -94,18 +93,16 @@
   transition: width 0.5s ease-in-out;
 }
 
-/* --- НОВЫЕ СТИЛИ ДЛЯ СЛАЙДЕРА --- */
 .contentSlider {
   display: flex;
-  width: 200%; /* Два экрана в ширину */
+  width: 200%;
 }
 
 .slide {
-  width: 50%; /* Каждый слайд занимает половину */
-  padding: 0 2px; /* Маленький отступ, чтобы не было артефактов */
+  width: 50%;
+  padding: 0 2px;
   flex-shrink: 0;
 }
-/* --- КОНЕЦ НОВЫХ СТИЛЕЙ --- */
 
 .sectionsList {
   display: flex;

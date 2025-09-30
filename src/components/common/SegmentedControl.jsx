@@ -1,6 +1,6 @@
 // src/components/common/SegmentedControl.jsx
 import React from 'react';
-import { motion } from 'framer-motion'; // <-- Импортируем motion
+import { motion } from 'framer-motion';
 import styles from './SegmentedControl.module.css';
 
 const SegmentedControl = ({ options, selected, onSelect }) => {
@@ -12,15 +12,15 @@ const SegmentedControl = ({ options, selected, onSelect }) => {
           className={`${styles.button} ${selected === option.value ? styles.selected : ''}`}
           onClick={() => onSelect(option.value)}
         >
-          {/* --- ИЗМЕНЕНИЕ: Добавляем анимированный ползунок --- */}
+          {/* Анимированный прямоугольник появляется только под активной кнопкой */}
           {selected === option.value && (
             <motion.div
               className={styles.slider}
-              layoutId="segmented-control-slider" // Уникальный ID для анимации
+              layoutId="segmented-control-slider" // Эта магия заставляет его "переезжать"
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             />
           )}
-          {option.label}
+          <span className={styles.label}>{option.label}</span>
         </button>
       ))}
     </div>

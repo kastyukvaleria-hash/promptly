@@ -37,9 +37,9 @@ const HomePage = () => {
     if (!courseData?.sections) {
       return { lectureSections: [], practiceSections: [] };
     }
-    // --- ГЛАВНЫЙ ФИКС: "ТУПОЙ" И НАДЕЖНЫЙ ФИЛЬТР ---
-    const lectures = courseData.sections.filter(section => !section.isPremium); // Все, где isPremium не true
-    const practices = courseData.sections.filter(section => section.isPremium === true); // Только те, где isPremium это true
+    // Правильный и надежный фильтр
+    const lectures = courseData.sections.filter(section => !section.premium);
+    const practices = courseData.sections.filter(section => section.premium === true);
     return { lectureSections: lectures, practiceSections: practices };
   }, [courseData]);
 
@@ -100,6 +100,7 @@ const HomePage = () => {
           Панель Администратора
         </Link>
       )}
+
 
       <div className={styles.overallProgress}>
           <div className={styles.progressInfo}>
