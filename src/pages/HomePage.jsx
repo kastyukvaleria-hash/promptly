@@ -1,6 +1,7 @@
 // src/pages/HomePage.jsx
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion'; // <-- Импортируем motion
 import { useCourseData } from '../context/CourseContext.jsx';
 import { useAuth } from '../hooks/useAuth.js';
 import LivesIndicator from '../components/common/LivesIndicator.jsx';
@@ -36,12 +37,12 @@ const HomePage = () => {
     if (!courseData?.sections) {
       return { lectureSections: [], practiceSections: [] };
     }
-    const lectures = courseData.sections.filter(section => !section.isPremium);
-    const practices = courseData.sections.filter(section => section.isPremium);
+    // --- ИСПРАВЛЕНИЕ ФИЛЬТРА ---
+    // Убеждаемся, что фильтрация работает правильно
+    const lectures = courseData.sections.filter(section => section.isPremium === false);
+    const practices = courseData.sections.filter(section => section.isPremium === true);
     return { lectureSections: lectures, practiceSections: practices };
   }, [courseData]);
-
-  const sectionsToDisplay = activeTab === 'lectures' ? lectureSections : practiceSections;
 
   if (isPreparing) {
     return <HomePageSkeleton />;
@@ -61,23 +62,22 @@ const HomePage = () => {
   }
 
   if (!courseData || !courseData.sections || !courseData.sections.length) {
-    return (
-      <div className={styles.container}>
-        <header className={styles.header}>
-          <div className={styles.titleWrapper}>
-            <h1 className={styles.title}>Привет 👋</h1>
-            <h2 className={styles.subtitle}>Пора учить промпты!</h2>
+      return (
+          <div className={styles.container}>
+              <header className={styles.header}>
+                  <div className={styles.titleWrapper}>
+                      <h1 className={styles.title}>Привет 👋</h1>
+                      <h2 className={styles.subtitle}>Пора учить промпты!</h2>
+                  </div>
+              </header>
+              {user && user.role === 'ADMIN' && (
+                  <Link to="/admin" className={styles.adminButton}>Панель Администратора</Link>
+              )}
+              <div className={styles.message}>Курс пока пуст. Загляните позже!</div>
           </div>
-        </header>
-        {user && user.role === 'ADMIN' && (
-          <Link to="/admin" className={styles.adminButton}>Панель Администратора</Link>
-        )}
-        <div className={styles.message}>Курс пока пуст. Загляните позже!</div>
-      </div>
-    );
+      );
   }
 
-  // --- ИЗМЕНЕНИЕ: Возвращаем простой расчет общего прогресса ---
   const totalLessonsInCourse = (courseData.sections || []).reduce(
     (total, section) => total + section.chapters.reduce((sum, chapter) => sum + chapter.lectures.length, 0),
     0
@@ -102,7 +102,6 @@ const HomePage = () => {
         </Link>
       )}
 
-      {/* --- ИЗМЕНЕНИЕ: Блок прогресса теперь показывается ВСЕГДА и использует ОБЩИЕ данные --- */}
       <div className={styles.overallProgress}>
           <div className={styles.progressInfo}>
               <span className={styles.progressTitle}>Пройти {courseData.sections.length} раздела</span>
@@ -124,23 +123,36 @@ const HomePage = () => {
         selected={activeTab}
         onSelect={setActiveTab}
       />
-
-      <main className={styles.sectionsList}>
-        {sectionsToDisplay.length > 0 ? (
-            sectionsToDisplay.map((section, index) => (
-                <SectionCard key={section.id} section={section} index={index} />
-            ))
-        ) : (
-            <div className={styles.message}>
-                <p>
-                    {activeTab === 'lectures'
-                        ? 'Здесь пока нет лекций. Загляните позже!'
-                        : 'Здесь пока нет практических курсов. Они скоро появятся!'
-                    }
-                </p>
-            </div>
-        )}
-      </main>
+      
+      {/* --- НОВАЯ СТРУКТУРА ДЛЯ АНИМАЦИИ СЛАЙДЕРА --- */}
+      <motion.div
+        className={styles.contentSlider}
+        animate={{ x: activeTab === 'lectures' ? '0%' : '-50%' }}
+        transition={{ duration: 0.5, type: 'spring', bounce: 0.1 }}
+      >
+        <div className={styles.slide}>
+          <main className={styles.sectionsList}>
+            {lectureSections.length > 0 ? (
+                lectureSections.map((section, index) => (
+                    <SectionCard key={section.id} section={section} index={index} />
+                ))
+            ) : (
+                <div className={styles.message}><p>Здесь пока нет лекций.</p></div>
+            )}
+          </main>
+        </div>
+        <div className={styles.slide}>
+          <main className={styles.sectionsList}>
+            {practiceSections.length > 0 ? (
+                practiceSections.map((section, index) => (
+                    <SectionCard key={section.id} section={section} index={index} />
+                ))
+            ) : (
+                <div className={styles.message}><p>Здесь пока нет практических курсов.</p></div>
+            )}
+          </main>
+        </div>
+      </motion.div>
     </div>
   );
 };

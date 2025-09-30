@@ -1,8 +1,11 @@
+/* src/pages/HomePage.module.css */
 .container {
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
   padding: 0 20px;
+  /* --- ИЗМЕНЕНИЕ: Добавляем, чтобы скрыть "второй" слайд --- */
+  overflow-x: hidden;
 }
 
 .header {
@@ -21,7 +24,7 @@
 }
 
 .title, .subtitle {
-  font-size: 1.8rem;
+  font-size: 1.9rem;
   font-weight: 600;
   color: var(--text-primary);
   line-height: 1.2;
@@ -91,23 +94,32 @@
   transition: width 0.5s ease-in-out;
 }
 
+/* --- НОВЫЕ СТИЛИ ДЛЯ СЛАЙДЕРА --- */
+.contentSlider {
+  display: flex;
+  width: 200%; /* Два экрана в ширину */
+}
+
+.slide {
+  width: 50%; /* Каждый слайд занимает половину */
+  padding: 0 2px; /* Маленький отступ, чтобы не было артефактов */
+  flex-shrink: 0;
+}
+/* --- КОНЕЦ НОВЫХ СТИЛЕЙ --- */
+
 .sectionsList {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-/* --- НАЧАЛО ИЗМЕНЕНИЙ --- */
 .message {
   display: flex;
-  /* Ставим элементы друг под другом */
   flex-direction: column; 
   justify-content: center;
   align-items: center;
   height: 30vh;
   font-size: 1.2rem;
   color: var(--text-secondary);
-  /* Добавляем отступ между текстом и кнопкой */
   gap: 20px; 
 }
-/* --- КОНЕЦ ИЗМЕНЕНИЙ --- */
