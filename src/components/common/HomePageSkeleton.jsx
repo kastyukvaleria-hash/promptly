@@ -1,5 +1,4 @@
 // src/components/common/HomePageSkeleton.jsx
-
 import React from 'react';
 import styles from './HomePageSkeleton.module.css';
 
@@ -17,6 +16,9 @@ const HomePageSkeleton = () => {
       </header>
 
       <div className={`${styles.placeholder} ${styles.overallProgress}`} />
+      
+      {/* --- ИЗМЕНЕНИЕ: Добавляем плейсхолдер для переключателя --- */}
+      <div className={`${styles.placeholder} ${styles.segmentedControl}`} />
 
       <main className={styles.sectionsList}>
         <div className={`${styles.placeholder} ${styles.sectionCard}`} />

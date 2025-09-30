@@ -14,7 +14,7 @@ const HomePage = () => {
   const { user } = useAuth();
   
   const [isPreparing, setIsPreparing] = useState(true);
-  const [activeTab, setActiveTab] = useState('lectures'); // 'lectures' или 'practice'
+  const [activeTab, setActiveTab] = useState('lectures');
 
   useEffect(() => {
     const preparePage = async () => {
@@ -32,7 +32,6 @@ const HomePage = () => {
     preparePage();
   }, [reloadCourseData]);
 
-  // Фильтруем все разделы на два массива: лекции и практики
   const { lectureSections, practiceSections } = useMemo(() => {
     if (!courseData?.sections) {
       return { lectureSections: [], practiceSections: [] };
@@ -42,7 +41,6 @@ const HomePage = () => {
     return { lectureSections: lectures, practiceSections: practices };
   }, [courseData]);
 
-  // Выбираем, какой массив показывать в зависимости от активной вкладки
   const sectionsToDisplay = activeTab === 'lectures' ? lectureSections : practiceSections;
 
   if (isPreparing) {
@@ -62,7 +60,6 @@ const HomePage = () => {
     );
   }
 
-  // Если вообще никаких разделов нет
   if (!courseData || !courseData.sections || !courseData.sections.length) {
     return (
       <div className={styles.container}>
@@ -80,11 +77,12 @@ const HomePage = () => {
     );
   }
 
-  const totalLessonsInCourse = lectureSections.reduce(
+  // --- ИЗМЕНЕНИЕ: Возвращаем простой расчет общего прогресса ---
+  const totalLessonsInCourse = (courseData.sections || []).reduce(
     (total, section) => total + section.chapters.reduce((sum, chapter) => sum + chapter.lectures.length, 0),
     0
   );
-  const completedLessonsInCourse = Math.round((totalLessonsInCourse * courseData.totalCourseProgress) / 100);
+  const completedLessonsInCourse = Math.round((totalLessonsInCourse * (courseData.totalCourseProgress || 0)) / 100);
 
   return (
     <div className={styles.container}>
@@ -104,21 +102,19 @@ const HomePage = () => {
         </Link>
       )}
 
-      {/* Показываем общий прогресс только на вкладке "Лекции" */}
-      {activeTab === 'lectures' && (
-        <div className={styles.overallProgress}>
-            <div className={styles.progressInfo}>
-                <span className={styles.progressTitle}>Пройти {lectureSections.length} раздела</span>
-                <span className={styles.progressPercentage}>{courseData.totalCourseProgress}%</span>
-            </div>
-            <p className={styles.progressDescription}>
-                {completedLessonsInCourse} из {totalLessonsInCourse} уроков
-            </p>
-            <div className={styles.progressBarContainer}>
-                <div className={styles.progressBar} style={{ width: `${courseData.totalCourseProgress}%` }} />
-            </div>
-        </div>
-      )}
+      {/* --- ИЗМЕНЕНИЕ: Блок прогресса теперь показывается ВСЕГДА и использует ОБЩИЕ данные --- */}
+      <div className={styles.overallProgress}>
+          <div className={styles.progressInfo}>
+              <span className={styles.progressTitle}>Пройти {courseData.sections.length} раздела</span>
+              <span className={styles.progressPercentage}>{courseData.totalCourseProgress}%</span>
+          </div>
+          <p className={styles.progressDescription}>
+              {completedLessonsInCourse} из {totalLessonsInCourse} уроков
+          </p>
+          <div className={styles.progressBarContainer}>
+              <div className={styles.progressBar} style={{ width: `${courseData.totalCourseProgress}%` }} />
+          </div>
+      </div>
 
       <SegmentedControl
         options={[
