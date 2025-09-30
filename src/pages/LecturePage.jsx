@@ -65,7 +65,14 @@ const LecturePage = () => {
 
     const paragraphs = useMemo(() => {
         if (!lecture?.contentText) return [];
-        return lecture.contentText.split(/(?<=[.!?])\s+|\n\s*\n/).filter(p => p.trim() !== '');
+
+        // --- ГЛАВНОЕ ИСПРАВЛЕНИЕ ЗДЕСЬ ---
+        // Старая "ломающаяся" строка:
+        // return lecture.contentText.split(/(?<=[.!?])\s+|\n\s*\n/).filter(p => p.trim() !== '');
+        
+        // Новая, безопасная строка, которая работает везде:
+        const contentWithDelimiters = lecture.contentText.replace(/([.!?])\s+/g, "$1\n\n");
+        return contentWithDelimiters.split(/\n\s*\n/).filter(p => p.trim() !== '');
     }, [lecture]);
 
     const allParagraphsVisible = visibleParagraphsCount >= paragraphs.length;
@@ -144,7 +151,6 @@ const LecturePage = () => {
                 ) : (
                     <div
                         className={`${styles.contentWrapper} ${!allParagraphsVisible ? styles.clickable : ''}`}
-                        // --- ГЛАВНОЕ ИЗМЕНЕНИЕ: Заменяем onClick на onMouseDown ---
                         onMouseDown={handleContentClick}
                     >
                         <h1 className={styles.title}>{lecture.title}</h1>

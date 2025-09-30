@@ -1,20 +1,21 @@
+// src/pages/AdminCreateSectionPage.jsx
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom'; // --- ДОБАВИЛИ useLocation ---
+import { useNavigate, useLocation } from 'react-router-dom';
 import adminService from '../api/adminService.js';
 import { getAllIconConfigs, getIconConfigById } from '../utils/iconUtils.jsx';
 import styles from './AdminCreateSectionPage.module.css'; 
 
 const AdminCreateSectionPage = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // --- ПОЛУЧАЕМ ДОСТУП К ДАННЫМ ССЫЛКИ ---
+  const location = useLocation();
   
-  // --- УМНАЯ ИНИЦИАЛИЗАЦИЯ ---
-  // Берем `nextOrderIndex`, который мы передали, или ставим 1 по умолчанию
   const [orderIndex, setOrderIndex] = useState(location.state?.nextOrderIndex || 1);
-  
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedIconId, setSelectedIconId] = useState(1);
+  // --- НАЧАЛО ИЗМЕНЕНИЙ ---
+  const [isPremium, setIsPremium] = useState(false); // Новое состояние для чекбокса
+  // --- КОНЕЦ ИЗМЕНЕНИЙ ---
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
@@ -31,6 +32,7 @@ const AdminCreateSectionPage = () => {
         description,
         orderIndex: Number(orderIndex),
         iconId: Number(selectedIconId),
+        isPremium: isPremium, // <-- Отправляем новое поле на бэкенд
       };
       await adminService.createSection(newSectionData);
       navigate('/admin'); 
@@ -71,6 +73,19 @@ const AdminCreateSectionPage = () => {
             ))}
           </div>
         </div>
+        
+        {/* --- НАЧАЛО ИЗМЕНЕНИЙ: ДОБАВЛЯЕМ ЧЕКБОКС --- */}
+        <div className={styles.checkboxGroup}>
+          <input 
+            id="isPremium" 
+            type="checkbox" 
+            checked={isPremium} 
+            onChange={(e) => setIsPremium(e.target.checked)} 
+          />
+          <label htmlFor="isPremium">Это премиум-раздел (Практика)?</label>
+        </div>
+        {/* --- КОНЕЦ ИЗМЕНЕНИЙ --- */}
+        
         {error && <p className={styles.error}>{error}</p>}
         <button type="submit" className={styles.submitButton} disabled={loading}>
           {loading ? 'Создание...' : 'Создать раздел'}

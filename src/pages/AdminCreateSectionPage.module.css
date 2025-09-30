@@ -108,3 +108,32 @@
   padding: 10px;
   border-radius: 8px;
 }
+
+
+/* src/pages/AdminCreateSectionPage.module.css */
+
+/* ... (все твои старые стили) ... */
+
+.checkboxGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #1F212B;
+  border: 1px solid #373A47;
+  border-radius: 8px;
+  padding: 14px;
+  margin-top: 10px;
+}
+
+.checkboxGroup input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent-purple);
+  cursor: pointer;
+}
+
+.checkboxGroup label {
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none; /* Чтобы текст не выделялся при клике */
+}

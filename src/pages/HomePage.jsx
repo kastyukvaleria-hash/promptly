@@ -1,50 +1,50 @@
 // src/pages/HomePage.jsx
-import React, { useState, useEffect } from 'react'; // <-- Добавили useState
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useCourseData } from '../context/CourseContext.jsx';
 import { useAuth } from '../hooks/useAuth.js';
 import LivesIndicator from '../components/common/LivesIndicator.jsx';
 import SectionCard from '../components/courses/SectionCard.jsx';
 import HomePageSkeleton from '../components/common/HomePageSkeleton.jsx';
+import SegmentedControl from '../components/common/SegmentedControl.jsx';
 import styles from './HomePage.module.css';
 
 const HomePage = () => {
-  // --- НАЧАЛО ИЗМЕНЕНИЙ ---
-  // Убираем isLoading, так как у нас будет своя, более умная логика
   const { courseData, error, reloadCourseData } = useCourseData();
   const { user } = useAuth();
   
-  // Новое состояние, которое будет управлять показом скелета
   const [isPreparing, setIsPreparing] = useState(true);
+  const [activeTab, setActiveTab] = useState('lectures'); // 'lectures' или 'practice'
 
   useEffect(() => {
-    // Создаем асинхронную функцию, чтобы красиво все обработать
     const preparePage = async () => {
       try {
-        // Запускаем ДВА процесса одновременно и ждем, пока ОБА завершатся
         await Promise.all([
-          reloadCourseData(), // 1. Загрузка данных
-          new Promise(resolve => setTimeout(resolve, 800)) // 2. Таймер на 1 секунду
+          reloadCourseData(),
+          new Promise(resolve => setTimeout(resolve, 1000))
         ]);
       } catch (err) {
-        // Если во время загрузки данных произойдет ошибка, мы ее проигнорируем здесь,
-        // потому что `useCourseData` сам сохранит эту ошибку в `error`
         console.error("Ошибка при загрузке данных курса, будет показан экран ошибки.", err);
       } finally {
-        // Этот блок выполнится в любом случае: и при успехе, и при ошибке.
-        // Он уберет скелет-загрузчик.
         setIsPreparing(false);
       }
     };
-
     preparePage();
-    // Мы хотим, чтобы это выполнялось только один раз при заходе на страницу,
-    // поэтому массив зависимостей оставляем таким.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  // --- КОНЕЦ ИЗМЕНЕНИЙ ---
+  }, [reloadCourseData]);
 
-  // Теперь главный индикатор загрузки - это наше новое состояние `isPreparing`
+  // Фильтруем все разделы на два массива: лекции и практики
+  const { lectureSections, practiceSections } = useMemo(() => {
+    if (!courseData?.sections) {
+      return { lectureSections: [], practiceSections: [] };
+    }
+    const lectures = courseData.sections.filter(section => !section.isPremium);
+    const practices = courseData.sections.filter(section => section.isPremium);
+    return { lectureSections: lectures, practiceSections: practices };
+  }, [courseData]);
+
+  // Выбираем, какой массив показывать в зависимости от активной вкладки
+  const sectionsToDisplay = activeTab === 'lectures' ? lectureSections : practiceSections;
+
   if (isPreparing) {
     return <HomePageSkeleton />;
   }
@@ -62,6 +62,7 @@ const HomePage = () => {
     );
   }
 
+  // Если вообще никаких разделов нет
   if (!courseData || !courseData.sections || !courseData.sections.length) {
     return (
       <div className={styles.container}>
@@ -71,19 +72,15 @@ const HomePage = () => {
             <h2 className={styles.subtitle}>Пора учить промпты!</h2>
           </div>
         </header>
-
         {user && user.role === 'ADMIN' && (
-          <Link to="/admin" className={styles.adminButton}>
-            Панель Администратора
-          </Link>
+          <Link to="/admin" className={styles.adminButton}>Панель Администратора</Link>
         )}
-
         <div className={styles.message}>Курс пока пуст. Загляните позже!</div>
       </div>
     );
   }
 
-  const totalLessonsInCourse = courseData.sections.reduce(
+  const totalLessonsInCourse = lectureSections.reduce(
     (total, section) => total + section.chapters.reduce((sum, chapter) => sum + chapter.lectures.length, 0),
     0
   );
@@ -107,23 +104,46 @@ const HomePage = () => {
         </Link>
       )}
 
-      <div className={styles.overallProgress}>
-        <div className={styles.progressInfo}>
-          <span className={styles.progressTitle}>Пройти {courseData.sections.length} раздела</span>
-          <span className={styles.progressPercentage}>{courseData.totalCourseProgress}%</span>
+      {/* Показываем общий прогресс только на вкладке "Лекции" */}
+      {activeTab === 'lectures' && (
+        <div className={styles.overallProgress}>
+            <div className={styles.progressInfo}>
+                <span className={styles.progressTitle}>Пройти {lectureSections.length} раздела</span>
+                <span className={styles.progressPercentage}>{courseData.totalCourseProgress}%</span>
+            </div>
+            <p className={styles.progressDescription}>
+                {completedLessonsInCourse} из {totalLessonsInCourse} уроков
+            </p>
+            <div className={styles.progressBarContainer}>
+                <div className={styles.progressBar} style={{ width: `${courseData.totalCourseProgress}%` }} />
+            </div>
         </div>
-        <p className={styles.progressDescription}>
-          {completedLessonsInCourse} из {totalLessonsInCourse} уроков
-        </p>
-        <div className={styles.progressBarContainer}>
-          <div className={styles.progressBar} style={{ width: `${courseData.totalCourseProgress}%` }} />
-        </div>
-      </div>
+      )}
+
+      <SegmentedControl
+        options={[
+          { label: 'Лекции', value: 'lectures' },
+          { label: 'Практика', value: 'practice' },
+        ]}
+        selected={activeTab}
+        onSelect={setActiveTab}
+      />
 
       <main className={styles.sectionsList}>
-        {courseData.sections.map((section, index) => (
-          <SectionCard key={section.id} section={section} index={index} />
-        ))}
+        {sectionsToDisplay.length > 0 ? (
+            sectionsToDisplay.map((section, index) => (
+                <SectionCard key={section.id} section={section} index={index} />
+            ))
+        ) : (
+            <div className={styles.message}>
+                <p>
+                    {activeTab === 'lectures'
+                        ? 'Здесь пока нет лекций. Загляните позже!'
+                        : 'Здесь пока нет практических курсов. Они скоро появятся!'
+                    }
+                </p>
+            </div>
+        )}
       </main>
     </div>
   );
