@@ -1,7 +1,7 @@
 // src/pages/HomePage.jsx
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion'; // <-- Импортируем motion
+import { motion } from 'framer-motion';
 import { useCourseData } from '../context/CourseContext.jsx';
 import { useAuth } from '../hooks/useAuth.js';
 import LivesIndicator from '../components/common/LivesIndicator.jsx';
@@ -37,10 +37,9 @@ const HomePage = () => {
     if (!courseData?.sections) {
       return { lectureSections: [], practiceSections: [] };
     }
-    // --- ИСПРАВЛЕНИЕ ФИЛЬТРА ---
-    // Убеждаемся, что фильтрация работает правильно
-    const lectures = courseData.sections.filter(section => section.isPremium === false);
-    const practices = courseData.sections.filter(section => section.isPremium === true);
+    // --- ГЛАВНЫЙ ФИКС: "ТУПОЙ" И НАДЕЖНЫЙ ФИЛЬТР ---
+    const lectures = courseData.sections.filter(section => !section.isPremium); // Все, где isPremium не true
+    const practices = courseData.sections.filter(section => section.isPremium === true); // Только те, где isPremium это true
     return { lectureSections: lectures, practiceSections: practices };
   }, [courseData]);
 
@@ -124,7 +123,6 @@ const HomePage = () => {
         onSelect={setActiveTab}
       />
       
-      {/* --- НОВАЯ СТРУКТУРА ДЛЯ АНИМАЦИИ СЛАЙДЕРА --- */}
       <motion.div
         className={styles.contentSlider}
         animate={{ x: activeTab === 'lectures' ? '0%' : '-50%' }}
