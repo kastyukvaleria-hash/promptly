@@ -1,0 +1,51 @@
+/* src/components/layout/AdminLayout.module.css */
+.adminHeader {
+  background-color: #1F212B;
+  border-bottom: 1px solid #373A47;
+  padding: 16px 40px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.homeButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #373A47;
+  color: var(--text-primary);
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.homeButton:hover {
+  background-color: #4a4d5c;
+}
+
+.homeButton svg {
+  font-size: 1.1rem;
+}
+
+.adminContent {
+  padding-top: 20px;
+}
