@@ -37,7 +37,6 @@ const HomePage = () => {
     if (!courseData?.sections) {
       return { lectureSections: [], practiceSections: [] };
     }
-    // Правильный и надежный фильтр
     const lectures = courseData.sections.filter(section => !section.premium);
     const practices = courseData.sections.filter(section => section.premium === true);
     return { lectureSections: lectures, practiceSections: practices };
@@ -61,20 +60,20 @@ const HomePage = () => {
   }
 
   if (!courseData || !courseData.sections || !courseData.sections.length) {
-      return (
-          <div className={styles.container}>
-              <header className={styles.header}>
-                  <div className={styles.titleWrapper}>
-                      <h1 className={styles.title}>Привет 👋</h1>
-                      <h2 className={styles.subtitle}>Пора учить промпты!</h2>
-                  </div>
-              </header>
-              {user && user.role === 'ADMIN' && (
-                  <Link to="/admin" className={styles.adminButton}>Панель Администратора</Link>
-              )}
-              <div className={styles.message}>Курс пока пуст. Загляните позже!</div>
+    return (
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <div className={styles.titleWrapper}>
+            <h1 className={styles.title}>Привет 👋</h1>
+            <h2 className={styles.subtitle}>Пора учить промпты!</h2>
           </div>
-      );
+        </header>
+        {user && user.role === 'ADMIN' && (
+          <Link to="/admin" className={styles.adminButton}>Панель Администратора</Link>
+        )}
+        <div className={styles.message}>Курс пока пуст. Загляните позже!</div>
+      </div>
+    );
   }
 
   const totalLessonsInCourse = (courseData.sections || []).reduce(
@@ -84,74 +83,77 @@ const HomePage = () => {
   const completedLessonsInCourse = Math.round((totalLessonsInCourse * (courseData.totalCourseProgress || 0)) / 100);
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <div className={styles.livesWrapper}>
-          <LivesIndicator />
-        </div>
-        <div className={styles.titleWrapper}>
-          <h1 className={styles.title}>Привет 👋</h1>
-          <h2 className={styles.subtitle}>Пора учить промпты!</h2>
-        </div>
-      </header>
+    <div className={styles.pageContainer}>
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <div className={styles.livesWrapper}>
+            <LivesIndicator />
+          </div>
+          <div className={styles.titleWrapper}>
+            <h1 className={styles.title}>Привет 👋</h1>
+            <h2 className={styles.subtitle}>Пора учить промпты!</h2>
+          </div>
+        </header>
 
-      {user && user.role === 'ADMIN' && (
-        <Link to="/admin" className={styles.adminButton}>
-          Панель Администратора
-        </Link>
-      )}
+        {user && user.role === 'ADMIN' && (
+          <Link to="/admin" className={styles.adminButton}>
+            Панель Администратора
+          </Link>
+        )}
 
-
-      <div className={styles.overallProgress}>
+        <div className={styles.overallProgress}>
           <div className={styles.progressInfo}>
-              <span className={styles.progressTitle}>Пройти {courseData.sections.length} раздела</span>
-              <span className={styles.progressPercentage}>{courseData.totalCourseProgress}%</span>
+            <span className={styles.progressTitle}>Пройти {courseData.sections.length} раздела</span>
+            <span className={styles.progressPercentage}>{courseData.totalCourseProgress}%</span>
           </div>
           <p className={styles.progressDescription}>
-              {completedLessonsInCourse} из {totalLessonsInCourse} уроков
+            {completedLessonsInCourse} из {totalLessonsInCourse} уроков
           </p>
           <div className={styles.progressBarContainer}>
-              <div className={styles.progressBar} style={{ width: `${courseData.totalCourseProgress}%` }} />
+            <div className={styles.progressBar} style={{ width: `${courseData.totalCourseProgress}%` }} />
           </div>
+        </div>
+
+        <SegmentedControl
+          options={[
+            { label: 'Лекции', value: 'lectures' },
+            { label: 'Практика', value: 'practice' },
+          ]}
+          selected={activeTab}
+          onSelect={setActiveTab}
+        />
       </div>
 
-      <SegmentedControl
-        options={[
-          { label: 'Лекции', value: 'lectures' },
-          { label: 'Практика', value: 'practice' },
-        ]}
-        selected={activeTab}
-        onSelect={setActiveTab}
-      />
-      
-      <motion.div
-        className={styles.contentSlider}
-        animate={{ x: activeTab === 'lectures' ? '0%' : '-50%' }}
-        transition={{ duration: 0.5, type: 'spring', bounce: 0.1 }}
-      >
-        <div className={styles.slide}>
-          <main className={styles.sectionsList}>
-            {lectureSections.length > 0 ? (
-                lectureSections.map((section, index) => (
-                    <SectionCard key={section.id} section={section} index={index} />
-                ))
-            ) : (
-                <div className={styles.message}><p>Здесь пока нет лекций.</p></div>
-            )}
-          </main>
-        </div>
-        <div className={styles.slide}>
-          <main className={styles.sectionsList}>
-            {practiceSections.length > 0 ? (
-                practiceSections.map((section, index) => (
-                    <SectionCard key={section.id} section={section} index={index} />
-                ))
-            ) : (
-                <div className={styles.message}><p>Здесь пока нет практических курсов.</p></div>
-            )}
-          </main>
-        </div>
-      </motion.div>
+      <div className={styles.sliderWrapper}>
+        <motion.div
+          className={styles.contentSlider}
+          animate={{ x: activeTab === 'lectures' ? '0%' : '-50%' }}
+          transition={{ duration: 0.5, type: 'spring', bounce: 0.1 }}
+        >
+          <div className={styles.slide}>
+            <main className={`${styles.sectionsList} ${styles.container}`}>
+              {lectureSections.length > 0 ? (
+                  lectureSections.map((section, index) => (
+                      <SectionCard key={section.id} section={section} index={index} />
+                  ))
+              ) : (
+                  <div className={styles.message}><p>Здесь пока нет лекций.</p></div>
+              )}
+            </main>
+          </div>
+          <div className={styles.slide}>
+            <main className={`${styles.sectionsList} ${styles.container}`}>
+              {practiceSections.length > 0 ? (
+                  practiceSections.map((section, index) => (
+                      <SectionCard key={section.id} section={section} index={index} />
+                  ))
+              ) : (
+                  <div className={styles.message}><p>Здесь пока нет практических курсов.</p></div>
+              )}
+            </main>
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 };

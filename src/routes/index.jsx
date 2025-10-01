@@ -1,7 +1,8 @@
-
+// src/routes/index.jsx
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute.jsx';
 import MainLayout from '../components/layout/MainLayout.jsx';
+import AdminLayout from '../components/layout/AdminLayout.jsx'; // Убедись, что этот импорт есть
 import HomePage from '../pages/HomePage.jsx';
 import ProfilePage from '../pages/ProfilePage.jsx';
 import LoginPage from '../pages/LoginPage.jsx';
@@ -17,6 +18,10 @@ import AdminPromptsPage from '../pages/AdminPromptsPage.jsx';
 import AdminTestPage from '../pages/AdminTestPage.jsx';
 import ForgotPasswordPage from '../pages/ForgotPasswordPage.jsx';
 import ResetPasswordPage from '../pages/ResetPasswordPage.jsx';
+import LinkAccountPage from '../pages/LinkAccountPage.jsx'; // Убедись, что этот импорт есть
+
+// ВОТ НОВЫЙ ИМПОРТ
+import TelegramAuthPage from '../pages/TelegramAuthPage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -44,7 +49,12 @@ const router = createBrowserRouter([
         element: <TestPage />,
       },
       {
+        path: 'link-account',
+        element: <LinkAccountPage />,
+      },
+      {
         path: 'admin',
+        element: <AdminLayout />,
         children: [
             { index: true, element: <AdminPage /> },
             { path: 'create-section', element: <AdminCreateSectionPage /> },
@@ -61,6 +71,11 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage />,
+  },
+  // ВОТ НОВЫЙ РОУТ
+  {
+    path: '/auth/telegram',
+    element: <TelegramAuthPage />,
   },
   {
     path: '/forgot-password',
