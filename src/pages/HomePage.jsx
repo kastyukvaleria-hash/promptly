@@ -1,3 +1,4 @@
+
 // src/pages/HomePage.jsx
 import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
@@ -37,7 +38,6 @@ const HomePage = () => {
     if (!courseData?.sections) {
       return { lectureSections: [], practiceSections: [] };
     }
-    // Правильный и надежный фильтр
     const lectures = courseData.sections.filter(section => !section.premium);
     const practices = courseData.sections.filter(section => section.premium === true);
     return { lectureSections: lectures, practiceSections: practices };
@@ -100,6 +100,7 @@ const HomePage = () => {
           Панель Администратора
         </Link>
       )}
+
 
       <div className={styles.overallProgress}>
           <div className={styles.progressInfo}>
