@@ -52,7 +52,7 @@
   background-color: var(--primary-element);
   border-radius: 20px;
   padding: 20px;
-  margin-bottom: 24px; 
+  margin-bottom: 24px;
 }
 
 .progressInfo {
@@ -97,27 +97,30 @@
   display: flex;
   width: calc(200% + 40px);
   margin-left: -20px;
+  overflow: hidden;
 }
 
 .slide {
   width: 50%;
   flex-shrink: 0;
   padding: 0 20px;
+  overflow: hidden;
 }
 
 .sectionsList {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-height: 200px;
 }
 
 .message {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 30vh;
   font-size: 1.2rem;
   color: var(--text-secondary);
-  gap: 20px; 
+  gap: 20px;
 }
