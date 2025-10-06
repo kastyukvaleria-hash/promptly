@@ -1,19 +1,10 @@
 /* src/pages/HomePage.module.css */
-
-.pageContainer {
-  width: 100%;
-  overflow-x: hidden;
-}
-
 .container {
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
   padding: 0 20px;
-}
-
-.sliderWrapper {
-  width: 100%;
+  overflow-x: hidden;
 }
 
 .header {
@@ -32,7 +23,7 @@
 }
 
 .title, .subtitle {
-  font-size: 1.7rem;
+  font-size: 1.9rem;
   font-weight: 600;
   color: var(--text-primary);
   line-height: 1.2;
@@ -61,7 +52,7 @@
   background-color: var(--primary-element);
   border-radius: 20px;
   padding: 20px;
-  margin-bottom: 24px;
+  margin-bottom: 24px; 
 }
 
 .progressInfo {
@@ -104,28 +95,29 @@
 
 .contentSlider {
   display: flex;
-  width: 200%;
+  width: calc(200% + 40px);
+  margin-left: -20px;
 }
 
 .slide {
   width: 50%;
   flex-shrink: 0;
+  padding: 0 20px;
 }
 
 .sectionsList {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 0;
 }
 
 .message {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; 
   justify-content: center;
   align-items: center;
   height: 30vh;
   font-size: 1.2rem;
   color: var(--text-secondary);
-  gap: 20px;
+  gap: 20px; 
 }
